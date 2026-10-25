@@ -4,7 +4,7 @@ interface Input1Props{
     type? : string;
     id? : string;
     extraCss?: string;
-    placeholder: string;
+    placeholder?: string;
     value?: string;
     onChange?: (e:ChangeEvent<HTMLInputElement>) => void;
 }

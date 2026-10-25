@@ -2,7 +2,7 @@
 
 import Button1 from "@/app/component/button1";
 import ColorButton1 from "@/app/component/button1";
-import Input1 from "@/app/component/iInput1";
+import Input1 from "@/app/component/input1";
 import { useRouter } from "next/navigation";
 import { ReactNode, useState } from "react";
 
@@ -53,15 +53,17 @@ export default function JoinForm() {
 
         console.log(data.result);
 
-        if(data.result == "success"){
+        if (data.result == "success") {
             alert("가입 완료");
             router.push("/login");
-        }else{
+        } else {
             alert("가입 실패");
-            
+
         }
+    };
 
-
+    const goToLogin = () => {
+        router.push("/login")
     };
 
     return (
@@ -114,12 +116,18 @@ export default function JoinForm() {
                     />
                 </Wrapper>
 
-                <Wrapper>
-                    <Button1
-                        value="가입하기"
-                        onClick={submitForm}
-                        extraCss="bg-blue-500 text-white" />
+                <Wrapper >
+                    <div className="flex flex-col gap-2">
+                        <Button1
+                            value="가입하기"
+                            onClick={submitForm}
+                            extraCss="bg-blue-500 text-white" />
 
+                        <Button1
+                            value="로그인하러 가기"
+                            onClick={goToLogin}
+                            extraCss="bg-green-500 text-white" />
+                    </div>
 
                 </Wrapper>
             </div>
