@@ -33,7 +33,6 @@ export async function POST(request: Request) {
             message: response.statusText
         });
     }
-
     
     const data = await response.json();
     console.log("시작");
@@ -57,7 +56,7 @@ export async function POST(request: Request) {
         secure : false,
         sameSite: "lax",
         path:"/",
-        maxAge: 60 * 5
+        maxAge: 30
     });
 
     responseApi.cookies.set({
