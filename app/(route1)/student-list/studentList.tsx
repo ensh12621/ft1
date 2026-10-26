@@ -4,15 +4,16 @@ import { Suspense } from "react";
 
 export default async function StudentList({
     searchParams
-} : { searchParams : Promise<{keyword: string}> }){
+} : { searchParams : Promise<{keyword: string, deptNo: string, orderBy: string}> }){
 
     // 1. searchParams를 안전하게 await 해서 키워드 추출
     const resolvedParams = await searchParams;
     const keyword = resolvedParams?.keyword || "";
     const deptNo = resolvedParams?.deptNo || "";
+    const orderBy = resolvedParams?.orderBy || "dept";
 
     // 2. 서버에서 학생 데이터 가져오기
-    const data = await getStudentList(keyword, deptNo);
+    const data = await getStudentList(keyword, deptNo, orderBy);
     const list = data?.list || [];
 
     console.log(data);

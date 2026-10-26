@@ -6,7 +6,7 @@ import Input1 from "@/app/component/input1";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
-interface DepartmentType{
+interface DepartmentType {
     deptno: number;
     dname: string;
     build: string;
@@ -17,10 +17,14 @@ interface DepartmentType{
 function SearchContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    
+
     const searchParamsKeyword = searchParams.get("keyword") || "";
 
     const searchParamsDepartment = searchParams.get("deptNo") || "";
+
+    const searchParamsOrderBy = searchParams.get("orderBy") || "dept";
+
+    const [orderBy, setOrderBy] = useState("dept");
 
     const [deptNo, setDeptNo] = useState("");
     const [departmentList, setDepartmentList] = useState<DepartmentType[]>([]);
@@ -35,20 +39,24 @@ function SearchContent() {
         setDeptNo(searchParamsDepartment);
     }, [searchParamsDepartment]);
 
+    useEffect(() => {
+        setOrderBy(searchParamsOrderBy);
+    }, [searchParamsOrderBy]);
+
     const submitKeyword = () => {
         //if (keyword.trim().length === 0) return;
-        router.push(`/student-list?keyword=${encodeURIComponent(keyword)}&deptNo=${deptNo}`);
+        router.push(`/student-list?keyword=${encodeURIComponent(keyword)}&deptNo=${deptNo}&orderBy=${orderBy}`);
     };
 
-    
+
     useEffect(() => {
-        async function fetchDepartment(){
-            try{
+        async function fetchDepartment() {
+            try {
                 const response = await fetch("/api/student/get-departments");
                 const data = await response.json();
                 const list = data.data.list;
                 setDepartmentList(list);
-            }catch(err){
+            } catch (err) {
                 console.log(err);
             }
         }
@@ -56,11 +64,17 @@ function SearchContent() {
         fetchDepartment();
     }, []);
 
-    const handleDepartmentChange = (e:ChangeEvent<HTMLSelectElement>) => {
-        router.push(`/student-list?keyword=${encodeURIComponent(keyword)}&deptNo=${e.target.value}`);
+    const handleDepartmentChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        router.push(`/student-list?keyword=${encodeURIComponent(keyword)}&deptNo=${e.target.value}&orderBy=${orderBy}`);
     };
 
-    
+
+
+    const handleChangeOrderBy = (e:ChangeEvent<HTMLInputElement>) => {
+        setOrderBy(e.target.value);
+        console.log('aaaaa:' + deptNo);
+        router.push(`/student-list?keyword=${encodeURIComponent(keyword)}&deptNo=${deptNo}&orderBy=${e.target.value}`);
+    };
 
 
     return (
@@ -86,17 +100,44 @@ function SearchContent() {
                 <select
                     value={deptNo}
                     onChange={handleDepartmentChange}>
-                        <option value="">전체</option>
+                    <option value="">전체</option>
 
 
                     {departmentList && departmentList.map((item, index) => (
-                        <option 
+                        <option
                             key={item.deptno}
                             value={item.deptno}>
                             {item.dname}
                         </option>
                     ))}
                 </select>
+            </div>
+
+            <div>
+                <ul className="flex gap-5">
+                    <li>
+                        <input type="radio" id="order-dept" value="dept" checked={orderBy === "dept"} onChange={handleChangeOrderBy}/>
+                        <label htmlFor="order-dept" >
+                            학과순
+                        </label>
+                        
+                    </li>
+                    
+                    <li>
+                        <input type="radio" id="order-height" value="height"  checked={orderBy === "height"} onChange={handleChangeOrderBy}/>
+                        <label htmlFor="order-height">
+                            키 순
+                        </label>
+                    </li>
+                    <li>
+                        <input type="radio" id="order-name" value="name" checked={orderBy === "name"} onChange={handleChangeOrderBy}/>
+                        <label htmlFor="order-name">
+                            이름순
+                        </label>
+                    </li>
+
+                </ul>
+
             </div>
         </div>
     );

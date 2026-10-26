@@ -1,3 +1,4 @@
+import { redirect } from "next/dist/server/api-utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
@@ -29,6 +30,8 @@ export async function middleware(request: NextRequest) {
         } catch (err) {
             console.error("middleware refresh error", err);
         }
+    }else if(!accessToken && !refreshToken){
+        NextResponse.redirect(new URL("/login", request.url));
     }
 
     // 다음 컴포넌트로 요청을 넘길 때, 새로 발급받은 토큰을 헤더(혹은 쿠키)에 담아서 전달
