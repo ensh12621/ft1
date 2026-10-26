@@ -43,7 +43,7 @@ export async function middleware(request: NextRequest) {
             secure: false,
             sameSite: "lax",
             path: "/",
-            maxAge: 60 * 30,
+            maxAge: 30,
         });
     }
 

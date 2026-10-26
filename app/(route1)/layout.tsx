@@ -1,5 +1,6 @@
 
 
+import Link from "next/link";
 import { ReactNode } from "react";
 
 
@@ -9,8 +10,16 @@ export default function Layout({
 } : { children : ReactNode} ){
     return (
         <div>
-            <header>
+            <header className="flex gap-5">
                 <h1 className="hidden">헤더</h1>
+                <Link href="/login">
+                    로그인
+                </Link>
+                
+                <Link href="/join">
+                    회원가입
+                </Link>
+
             </header>
 
             <main>

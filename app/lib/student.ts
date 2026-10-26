@@ -1,23 +1,19 @@
 import { cookies } from "next/headers";
+import { refreshAccessToken } from "./jwtRefresher";
 
-export async function getStudentList() {
+export async function getStudentList(keyword : string) {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get("accessToken")?.value;
 
-    console.log("lib/student.ts - 사용할 accessToken:", accessToken);
+    //console.log("lib/student.ts - 사용할 accessToken:", accessToken);
 
-    const response = await fetch("http://localhost:8080/student/list", {
+    const response = await fetch(`http://localhost:8080/student/search?keyword=${keyword}`, {
         method: "GET",
         headers: {
-            "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`
         }
     });
 
-    if (!response.ok) {
-        console.log("학생 목록 조회 실패:", response.status);
-        return null;
-    }
 
     return await response.json();
 }
